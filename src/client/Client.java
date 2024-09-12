@@ -46,7 +46,7 @@ public class Client extends javax.swing.JFrame {
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 		jTextArea1.setEditable(false);
-		jTextArea2.setEditable(false);
+		jTextArea2_1.setEditable(false);
 		onlineList = new ArrayList<>();
 		serverIP = JOptionPane.showInputDialog("Nhập IP của Server:");
 		if (serverIP != null && !serverIP.trim().isEmpty()) {
@@ -66,28 +66,33 @@ public class Client extends javax.swing.JFrame {
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated
 	// Code">//GEN-BEGIN:initComponents
-	 private void initComponents() {
-        jPanel3 = new javax.swing.JPanel();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jTextArea2.setBackground(new Color(255, 234, 244));
-        jPanel2 = new javax.swing.JPanel();
-        jPanel2.setBackground(new Color(255, 232, 243));
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+	private void initComponents() {
+	    jPanel3 = new javax.swing.JPanel();
+	    jTabbedPane1 = new javax.swing.JTabbedPane();
+	    jPanel1 = new javax.swing.JPanel();
+	    jPanel2 = new javax.swing.JPanel();
+	    jScrollPane1 = new javax.swing.JScrollPane();
+	    jTextArea1 = new javax.swing.JTextArea();
+	    jTextField1 = new javax.swing.JTextField();
+	    jButton1 = new javax.swing.JButton();
+	    JButton jButtonSendFile = new JButton("Send File");
+	    jLabel1 = new javax.swing.JLabel();
+	    jLabel2 = new javax.swing.JLabel();
+	    jLabel3 = new javax.swing.JLabel();
+
+	    btnNewButton_1 = new JButton(new ImageIcon(Client.class.getResource("/Img/smile.png")));
+	    btnNewButton_1_1 = new JButton(new ImageIcon(Client.class.getResource("/Img/angry.png")));
+	    btnNewButton_1_2 = new JButton(new ImageIcon(Client.class.getResource("/Img/love.png")));
+
+	    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         jButton1.setIcon(null);
         JButton jButton2 = new javax.swing.JButton();
         jButton2.setIcon(null);
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox1.setBackground(new Color(238, 255, 255));
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-
+        jComboBox1_1 = new javax.swing.JComboBox<>();
+        jComboBox1_1.setBackground(new Color(238, 255, 255));
+        jLabel1_1 = new javax.swing.JLabel();
+        jLabel2_1 = new javax.swing.JLabel();
+        jLabel3_1 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -102,34 +107,39 @@ public class Client extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 425, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Danh sách online", jPanel1);
+    
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
-    
+
+        btnNewButton_1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendIcon("😂");
+            }
+        });
+
+        btnNewButton_1_1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendIcon("😍");
+            }
+        });
+
+        btnNewButton_1_2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sendIcon("😡");
+            }
+        });
         jButton1.setText("Gửi");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        JButton jButtonSendFile = new JButton("Send File");
         jButtonSendFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -138,19 +148,19 @@ public class Client extends javax.swing.JFrame {
         });
         
 
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox1_1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Chọn người nhận");
+        jLabel1_1.setText("Chọn người nhận");
 
 		
 	
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("{Người nhận}");
+        jLabel3_1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3_1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3_1.setText("{Người nhận}");
         
         JButton btnNewButton = new JButton("File");
         btnNewButton.addActionListener(new ActionListener() {
@@ -158,50 +168,82 @@ public class Client extends javax.swing.JFrame {
         		  sendFile();
         	}
         });
-
+        
+        jScrollPane2_1 = new JScrollPane();
+        
+        JLabel jLabel1_1_1 = new JLabel();
+        jLabel1_1_1.setText("Danh sách online");
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2Layout.setHorizontalGroup(
         	jPanel2Layout.createParallelGroup(Alignment.TRAILING)
         		.addGroup(jPanel2Layout.createSequentialGroup()
+        			.addContainerGap()
+        			.addGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(jLabel1_1_1, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(jScrollPane2_1, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE))
         			.addGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
         				.addGroup(jPanel2Layout.createSequentialGroup()
-        					.addContainerGap()
-        					.addGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
-        						.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+        					.addGap(10)
+        					.addGroup(jPanel2Layout.createParallelGroup(Alignment.TRAILING)
         						.addGroup(jPanel2Layout.createSequentialGroup()
-        							.addComponent(jTextField1, 198, 198, 198)
-        							.addPreferredGap(ComponentPlacement.RELATED)
-        							.addComponent(jButton1, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))
-        						.addComponent(jLabel3, GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
-        						.addComponent(jComboBox1, 0, 277, Short.MAX_VALUE)
-        						.addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-        						.addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)))
+        							.addComponent(jLabel3_1, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+        							.addGap(45))
+        						.addGroup(jPanel2Layout.createSequentialGroup()
+        							.addGroup(jPanel2Layout.createParallelGroup(Alignment.TRAILING)
+        								.addComponent(jScrollPane1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
+        								.addComponent(jLabel1_1, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(jComboBox1_1, Alignment.LEADING, 0, 335, Short.MAX_VALUE)
+        								.addComponent(jTextField1, Alignment.LEADING, 339, 339, 339)
+        								.addGroup(Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+        									.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+        									.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+        									.addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 162, GroupLayout.PREFERRED_SIZE)))
+        							.addContainerGap())
+        						.addComponent(jLabel2_1, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)))
         				.addGroup(jPanel2Layout.createSequentialGroup()
-        					.addGap(105)
-        					.addComponent(btnNewButton)))
-        			.addContainerGap())
+        					.addGap(46)
+        					.addComponent(btnNewButton_1_2, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+        					.addGap(18)
+        					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+        					.addGap(18)
+        					.addComponent(btnNewButton_1_1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE)
+        					.addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
         	jPanel2Layout.createParallelGroup(Alignment.LEADING)
         		.addGroup(jPanel2Layout.createSequentialGroup()
         			.addContainerGap()
-        			.addComponent(jLabel1)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        			.addGap(21)
-        			.addComponent(jLabel3)
-        			.addPreferredGap(ComponentPlacement.UNRELATED)
-        			.addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE)
-        			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(jLabel2)
-        			.addPreferredGap(ComponentPlacement.UNRELATED)
         			.addGroup(jPanel2Layout.createParallelGroup(Alignment.BASELINE)
-        				.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
-        				.addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+        				.addComponent(jLabel1_1)
+        				.addComponent(jLabel1_1_1))
         			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(btnNewButton)
-        			.addContainerGap(39, Short.MAX_VALUE))
+        			.addGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(jScrollPane2_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
+        				.addGroup(jPanel2Layout.createSequentialGroup()
+        					.addComponent(jComboBox1_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(jLabel3_1)
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(jPanel2Layout.createParallelGroup(Alignment.LEADING)
+        						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(btnNewButton_1_2, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(jLabel2_1)
+        						.addComponent(btnNewButton_1_1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(jPanel2Layout.createParallelGroup(Alignment.BASELINE)
+        						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(jButton1, GroupLayout.PREFERRED_SIZE, 34, GroupLayout.PREFERRED_SIZE))
+        					.addGap(38))))
         );
+        
+        jTextArea2_1 = new JTextArea();
+        jTextArea2_1.setRows(5);
+        jTextArea2_1.setColumns(20);
+        jScrollPane2_1.setViewportView(jTextArea2_1);
         jPanel2.setLayout(jPanel2Layout);
 
         jTabbedPane1.addTab("Nhắn tin", jPanel2);
@@ -209,11 +251,15 @@ public class Client extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         layout.setHorizontalGroup(
         	layout.createParallelGroup(Alignment.LEADING)
-        		.addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
+        		.addGroup(layout.createSequentialGroup()
+        			.addComponent(jTabbedPane1, GroupLayout.PREFERRED_SIZE, 574, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
         	layout.createParallelGroup(Alignment.LEADING)
-        		.addComponent(jTabbedPane1, GroupLayout.DEFAULT_SIZE, 532, Short.MAX_VALUE)
+        		.addGroup(layout.createSequentialGroup()
+        			.addComponent(jTabbedPane1, GroupLayout.PREFERRED_SIZE, 569, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         getContentPane().setLayout(layout);
 
@@ -227,7 +273,7 @@ public class Client extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(rootPane, "Bạn chưa nhập tin nhắn");
 			return;
 		}
-		if (jComboBox1.getSelectedIndex() == 0) {
+		if (jComboBox1_1.getSelectedIndex() == 0) {
 			try {
 				write("send-to-global" + "," + messageContent + "," + this.id);
 				jTextArea1.setText(jTextArea1.getText() + "Bạn: " + messageContent + "\n");
@@ -237,7 +283,7 @@ public class Client extends javax.swing.JFrame {
 			}
 		} else {
 			try {
-				String[] partner = ((String) jComboBox1.getSelectedItem()).split(" ");
+				String[] partner = ((String) jComboBox1_1.getSelectedItem()).split(" ");
 				write("send-to-person" + "," + messageContent + "," + this.id + "," + partner[1]);
 				jTextArea1.setText(
 						jTextArea1.getText() + "Bạn (tới Client " + partner[1] + "): " + messageContent + "\n");
@@ -248,12 +294,11 @@ public class Client extends javax.swing.JFrame {
 		}
 		jTextField1.setText("");
 	}// GEN-LAST:event_jButton1ActionPerformed
-
 	private void jComboBox1ActionPerformed(ActionEvent evt) {// GEN-FIRST:event_jComboBox1ActionPerformed
-		if (jComboBox1.getSelectedIndex() == 0) {
-			jLabel3.setText("Global");
+		if (jComboBox1_1.getSelectedIndex() == 0) {
+			jLabel3_1.setText("Global");
 		} else {
-			jLabel3.setText("Đang nhắn với " + jComboBox1.getSelectedItem());
+			jLabel3_1.setText("Đang nhắn với " + jComboBox1_1.getSelectedItem());
 		}
 	}// GEN-LAST:event_jComboBox1ActionPerformed
 
@@ -287,7 +332,7 @@ public class Client extends javax.swing.JFrame {
 									onlineList.add(onlineSplit[i]);
 									online += "Client " + onlineSplit[i] + " đang online\n";
 								}
-								jTextArea2.setText(online);
+								jTextArea2_1.setText(online);
 								updateCombobox();
 							}
 							if (messageSplit[0].equals("global-message")) {
@@ -309,33 +354,31 @@ public class Client extends javax.swing.JFrame {
 	}
 
 	private void updateCombobox() {
-		jComboBox1.removeAllItems();
-		jComboBox1.addItem("Gửi tất cả");
+		jComboBox1_1.removeAllItems();
+		jComboBox1_1.addItem("Gửi tất cả");
 		String idString = "" + this.id;
 		for (String e : onlineList) {
 			if (!e.equals(idString)) {
-				jComboBox1.addItem("Client " + e);
+				jComboBox1_1.addItem("Client " + e);
 			}
 		}
 	}
+	private void sendIcon(String icon) {
+        try {
+            if (jComboBox1_1.getSelectedIndex() == 0) {
+                write("send-to-global," + icon + "," + this.id);
+                jTextArea1.setText(jTextArea1.getText() + "Bạn: " + icon + "\n");
+            } else {
+                String[] partner = ((String) jComboBox1_1.getSelectedItem()).split(" ");
+                write("send-to-person," + icon + "," + this.id + "," + partner[1]);
+                jTextArea1.setText(jTextArea1.getText() + "Bạn (tới Client " + partner[1] + "): " + icon + "\n");
+            }
+            jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Có lỗi xảy ra khi gửi icon");
+        }
+    }
 
-	private void setIDTitle() {
-		this.setTitle("Client " + this.id);
-	}
-
-	private void setID(int id) {
-		this.id = id;
-	}
-
-	private void write(String message) throws IOException {
-		os.write(message);
-		os.newLine();
-		os.flush();
-	}
-
-	public static void main(String args[]) {
-		new Client();
-	}
 	private void sendFile() {
 	    JFileChooser fileChooser = new JFileChooser();
 	    int returnValue = fileChooser.showOpenDialog(this);
@@ -363,19 +406,45 @@ public class Client extends javax.swing.JFrame {
 	        }
 	    }
 	}
-	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private JButton jButton1;
-	private JComboBox<String> jComboBox1;
-	private JLabel jLabel1;
-	private JLabel jLabel2;
-	private JLabel jLabel3;
-	private JPanel jPanel1;
-	private JPanel jPanel2;
-	private JPanel jPanel3;
-	private JScrollPane jScrollPane1;
-	private JScrollPane jScrollPane2;
-	private JTabbedPane jTabbedPane1;
-	private JTextArea jTextArea1;
-	private JTextArea jTextArea2;
-	private JTextField jTextField1;
+
+	private void setIDTitle() {
+		this.setTitle("Client " + this.id);
+	}
+
+	private void setID(int id) {
+		this.id = id;
+	}
+
+	private void write(String message) throws IOException {
+		os.write(message);
+		os.newLine();
+		os.flush();
+	}
+
+	 public static void main(String args[]) {
+	        new Client();
+	    }
+
+	    private JButton jButton1;
+	    private JComboBox<String> jComboBox1;
+	    private JComboBox<String> jComboBox1_1;
+	    private JLabel jLabel1;
+	    private JLabel jLabel1_1;
+	    private JLabel jLabel2;
+	    private JLabel jLabel2_1;
+	    private JLabel jLabel3;
+	    private JLabel jLabel3_1;
+	    private JPanel jPanel1;
+	    private JPanel jPanel2;
+	    private JPanel jPanel3;
+	    private JScrollPane jScrollPane1;
+	    private JTabbedPane jTabbedPane1;
+	    private JTextArea jTextArea1;
+	    private JTextField jTextField1;
+
+	private JButton      btnNewButton_1 ;
+	private JButton      btnNewButton_1_1;
+	private JButton     btnNewButton_1_2;
+	private JScrollPane jScrollPane2_1;
+	private JTextArea jTextArea2_1;
 }

@@ -36,7 +36,7 @@ public class Client extends javax.swing.JFrame {
 	private int id;
 	private String serverIP;
 
-
+//hhhhhhhhhhhhhhhh
 	/**
 	 * Creates new form Client
 	 */

@@ -1,110 +1,129 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.file.Paths;
 
 /**
- *
- * @author Admin
+ * Handles client communication.
  */
 public class ServerThread implements Runnable {
 
-	private Socket socketOfServer;
-	private int clientNumber;
-	private BufferedReader is;
-	private BufferedWriter os;
-	private boolean isClosed;
+    private Socket socketOfServer;
+    private String username;
+    private BufferedReader is;
+    private BufferedWriter os;
+    private boolean isClosed;
 
-	public BufferedReader getIs() {
-		return is;
-	}
+    public BufferedReader getIs() {
+        return is;
+    }
 
-	public BufferedWriter getOs() {
-		return os;
-	}
+    public BufferedWriter getOs() {
+        return os;
+    }
 
-	public int getClientNumber() {
-		return clientNumber;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public ServerThread(Socket socketOfServer, int clientNumber) {
-		this.socketOfServer = socketOfServer;
-		this.clientNumber = clientNumber;
-		System.out.println("Server thread number " + clientNumber + " Started");
-		isClosed = false;
-	}
+    public ServerThread(Socket socketOfServer) {
+        this.socketOfServer = socketOfServer;
+        this.username = null; // Initially set to null until username is received
+        System.out.println("Server thread started for: " + socketOfServer);
+        isClosed = false;
+    }
 
-	@Override
-	public void run() {
-		try {
-			// Mở luồng vào ra trên Socket tại Server.
-			is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
-			os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
-			System.out.println("Khời động luông mới thành công, ID là: " + clientNumber);
-			write("get-id" + "," + this.clientNumber);
-			Server.serverThreadBus.sendOnlineList();
-//			Server.serverThreadBus
-//					.mutilCastSend("global-message" + "," + "---Client " + this.clientNumber + " đã đăng nhập---");
-			String message;
-	        while (!isClosed) {
-	            message = is.readLine();
-	            if (message == null) {
-	                break;
-	            }
-	            String[] messageSplit = message.split(",");
-	            if (messageSplit[0].equals("send-to-global")) {
-	                Server.serverThreadBus.boardCast(this.getClientNumber(),
-	                        "global-message," + "Client " + messageSplit[2] + ": " + messageSplit[1]);
-	            } else if (messageSplit[0].equals("send-to-person")) {
-	                Server.serverThreadBus.sendMessageToPersion(Integer.parseInt(messageSplit[3]),
-	                        "Client " + messageSplit[2] + " (to bạn): " + messageSplit[1]);
-	            } else if (messageSplit[0].equals("send-file")) {
-	                String fileName = messageSplit[1];
-	                long fileSize = Long.parseLong(messageSplit[2]);
-	                receiveFile(fileName, fileSize);
-	            }
-	        }
-	    } catch (IOException e) {
-	        isClosed = true;
-	        Server.serverThreadBus.remove(clientNumber);
-	        System.out.println(this.clientNumber + " đã thoát");
-	        Server.serverThreadBus.sendOnlineList();
-	        Server.serverThreadBus.mutilCastSend("global-message," + "---Client " + this.clientNumber + " đã thoát---");
-	    }
-	}
+    @Override
+    public void run() {
+        try {
+            // Open input and output streams on the socket
+            is = new BufferedReader(new InputStreamReader(socketOfServer.getInputStream()));
+            os = new BufferedWriter(new OutputStreamWriter(socketOfServer.getOutputStream()));
+            
+            // Read the username from the client
+            String initialMessage = is.readLine();
+            if (initialMessage != null && initialMessage.startsWith("username:")) {
+                username = initialMessage.substring("username:".length());
+                System.out.println("Client username received: " + username);
+                
+                // Notify all clients about the new user
+                Server.serverThreadBus.sendOnlineList();
+            } else {
+                System.out.println("Failed to receive username from client.");
+                return;
+            }
 
-	private void receiveFile(String fileName, long fileSize) {
-	    try (FileOutputStream fileOutputStream = new FileOutputStream(Paths.get("received_files", fileName).toFile())) {
-	        InputStream is = socketOfServer.getInputStream();
-	        byte[] buffer = new byte[4096];
-	        long bytesRead = 0;
-	        int read;
-	        while ((read = is.read(buffer)) != -1 && bytesRead < fileSize) {
-	            fileOutputStream.write(buffer, 0, read);
-	            bytesRead += read;
-	        }
-	        fileOutputStream.flush();
-	        System.out.println("File received: " + fileName);
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}
+            // Notify client of successful connection
+            write("get-id,"+ this.username);
+            
+            String message;
+            while (!isClosed) {
+                message = is.readLine();
+                if (message == null) {
+                    break;
+                }
+                String[] messageSplit = message.split(",");
+//             System.out.println("messageSplit[0]"+ messageSplit[0]+" " +messageSplit[2] + ": " + messageSplit[1]);
+                if (messageSplit[0].equals("send-to-global")) {
+                    Server.serverThreadBus.boardCast(this.getUsername(),
+                            "global-message,"  + messageSplit[2] + ": " + messageSplit[1]);
+                } else if (messageSplit[0].equals("send-to-person")) {
+                    Server.serverThreadBus.sendMessageToPersion(messageSplit[3],
+                            messageSplit[2] + " (tới bạn): " + messageSplit[1]);
+                } else if (messageSplit[0].equals("send-file")) {
+                    String fileName = messageSplit[1];
+                    long fileSize = Long.parseLong(messageSplit[2]);
+                    receiveFile(fileName, fileSize);
+                }
+            }
+        } catch (IOException e) {
+            isClosed = true;
+            Server.serverThreadBus.remove(username);
+            System.out.println(this.username + " đã thoát");
+            Server.serverThreadBus.sendOnlineList();
+            Server.serverThreadBus.mutilCastSend("global-message," + "---Client " + this.username + " đã thoát---");
+        }
+    }
 
-	public void write(String message) throws IOException {
-		os.write(message);
-		os.newLine();
-		os.flush();
-	}
+    private void receiveFile(String fileName, long fileSize) {
+        File directory = new File("received_files");
+        if (!directory.exists()) {
+            directory.mkdirs(); // Tạo thư mục nếu nó không tồn tại
+        }
+        try (FileOutputStream fileOutputStream = new FileOutputStream(Paths.get("received_files", fileName).toFile())) {
+            InputStream is = socketOfServer.getInputStream();
+            byte[] buffer = new byte[4096];
+            long bytesRead = 0;
+            int read;
+            while ((read = is.read(buffer)) != -1 && bytesRead < fileSize) {
+                fileOutputStream.write(buffer, 0, read);
+                bytesRead += read;
+            }
+            fileOutputStream.flush();
+            System.out.println("File received: " + fileName);
+
+            // Gửi thông báo cho client về việc file đã được nhận
+            PrintWriter out = new PrintWriter(socketOfServer.getOutputStream(), true);
+            out.println("receive-file," + fileName + "," + fileSize);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void write(String message) throws IOException {
+        os.write(message);
+        os.newLine();
+        os.flush();
+    }
 }

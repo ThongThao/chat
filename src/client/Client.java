@@ -6,12 +6,15 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +36,9 @@ public class Client extends javax.swing.JFrame {
 	private BufferedReader is;
 	private Socket socketOfClient;
 	private List<String> onlineList;
-	private int id;
 	private String serverIP;
-
-
+	 private String username;
+//hhhhhhhhhhhhhhhh
 	/**
 	 * Creates new form Client
 	 */
@@ -50,12 +52,17 @@ public class Client extends javax.swing.JFrame {
 		onlineList = new ArrayList<>();
 		serverIP = JOptionPane.showInputDialog("Nhập IP của Server:");
 		if (serverIP != null && !serverIP.trim().isEmpty()) {
-			setUpSocket(serverIP);
-		} else {
-			JOptionPane.showMessageDialog(rootPane, "IP Server không hợp lệ");
-			System.exit(1);
-		}
-		id = -1;
+	        this.username = JOptionPane.showInputDialog("Nhập username của bạn:");
+	        if (this.username != null && !this.username.trim().isEmpty()) {
+	            setUpSocket(serverIP, this.username);
+	        } else {
+	            JOptionPane.showMessageDialog(rootPane, "Username không hợp lệ");
+	            System.exit(1);
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(rootPane, "IP Server không hợp lệ");
+	        System.exit(1);
+	    }
 	}
 
 	/**
@@ -275,7 +282,7 @@ public class Client extends javax.swing.JFrame {
 		}
 		if (jComboBox1_1.getSelectedIndex() == 0) {
 			try {
-				write("send-to-global" + "," + messageContent + "," + this.id);
+				write("send-to-global" + "," + messageContent + "," + this.username);
 				jTextArea1.setText(jTextArea1.getText() + "Bạn: " + messageContent + "\n");
 				jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
 			} catch (IOException ex) {
@@ -283,10 +290,10 @@ public class Client extends javax.swing.JFrame {
 			}
 		} else {
 			try {
-				String[] partner = ((String) jComboBox1_1.getSelectedItem()).split(" ");
-				write("send-to-person" + "," + messageContent + "," + this.id + "," + partner[1]);
+				 String partner = (String) jComboBox1_1.getSelectedItem();
+				write("send-to-person" + "," + messageContent + "," + this.username + "," + partner);
 				jTextArea1.setText(
-						jTextArea1.getText() + "Bạn (tới Client " + partner[1] + "): " + messageContent + "\n");
+						jTextArea1.getText() + "Bạn (tới " + partner + "): " + messageContent + "\n");
 				jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
 			} catch (IOException ex) {
 				JOptionPane.showMessageDialog(rootPane, "Có lỗi xảy ra");
@@ -302,7 +309,7 @@ public class Client extends javax.swing.JFrame {
 		}
 	}// GEN-LAST:event_jComboBox1ActionPerformed
 
-	private void setUpSocket(String serverIP) {
+	private void setUpSocket(String serverIP , String username) {
 		try {
 			thread = new Thread() {
 				@Override
@@ -313,6 +320,8 @@ public class Client extends javax.swing.JFrame {
 						System.out.println("Kết nối thành công!");
 						os = new BufferedWriter(new OutputStreamWriter(socketOfClient.getOutputStream()));
 						is = new BufferedReader(new InputStreamReader(socketOfClient.getInputStream()));
+						 // Gửi username đến server
+	                    write("username:" + username);
 						String message;
 						while (true) {
 							message = is.readLine();
@@ -321,7 +330,7 @@ public class Client extends javax.swing.JFrame {
 							}
 							String[] messageSplit = message.split(",");
 							if (messageSplit[0].equals("get-id")) {
-								setID(Integer.parseInt(messageSplit[1]));
+								setUsername(messageSplit[1]);
 								setIDTitle();
 							}
 							if (messageSplit[0].equals("update-online-list")) {
@@ -330,7 +339,7 @@ public class Client extends javax.swing.JFrame {
 								String[] onlineSplit = messageSplit[1].split("-");
 								for (int i = 0; i < onlineSplit.length; i++) {
 									onlineList.add(onlineSplit[i]);
-									online += "Client " + onlineSplit[i] + " đang online\n";
+									online +=  onlineSplit[i] + " đang online\n";
 								}
 								jTextArea2_1.setText(online);
 								updateCombobox();
@@ -339,6 +348,10 @@ public class Client extends javax.swing.JFrame {
 								jTextArea1.setText(jTextArea1.getText() + messageSplit[1] + "\n");
 								jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
 							}
+							if (messageSplit[0].equals("receive-file")) {
+								 receiveFile(messageSplit[1], Long.parseLong(messageSplit[2]));
+							}
+							
 						}
 					} catch (UnknownHostException e) {
 						JOptionPane.showMessageDialog(rootPane, "Không thể kết nối đến server: " + e.getMessage());
@@ -356,22 +369,22 @@ public class Client extends javax.swing.JFrame {
 	private void updateCombobox() {
 		jComboBox1_1.removeAllItems();
 		jComboBox1_1.addItem("Gửi tất cả");
-		String idString = "" + this.id;
+		String idString = this.username;
 		for (String e : onlineList) {
 			if (!e.equals(idString)) {
-				jComboBox1_1.addItem("Client " + e);
+				jComboBox1_1.addItem(e);
 			}
 		}
 	}
 	private void sendIcon(String icon) {
         try {
             if (jComboBox1_1.getSelectedIndex() == 0) {
-                write("send-to-global," + icon + "," + this.id);
+                write("send-to-global," + icon + "," + this.username);
                 jTextArea1.setText(jTextArea1.getText() + "Bạn: " + icon + "\n");
             } else {
-                String[] partner = ((String) jComboBox1_1.getSelectedItem()).split(" ");
-                write("send-to-person," + icon + "," + this.id + "," + partner[1]);
-                jTextArea1.setText(jTextArea1.getText() + "Bạn (tới Client " + partner[1] + "): " + icon + "\n");
+                String partner = (String) jComboBox1_1.getSelectedItem();
+                write("send-to-person," + icon + "," + this.username + "," + partner);
+                jTextArea1.setText(jTextArea1.getText() + "Bạn (tới " + partner + "): " + icon + "\n");
             }
             jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
         } catch (IOException ex) {
@@ -389,7 +402,7 @@ public class Client extends javax.swing.JFrame {
 
 	        try {
 	            // Send file details to server
-	            write("send-file," + fileName + "," + fileSize + "," + this.id);
+	            write("send-file," + fileName + "," + fileSize + "," + this.username);
 
 	            // Send file data
 	            try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -400,6 +413,9 @@ public class Client extends javax.swing.JFrame {
 	                    os.write(buffer, 0, bytesRead);
 	                }
 	                os.flush();
+	                // Hiển thị file đã gửi trên giao diện
+	                jTextArea1.setText(jTextArea1.getText() + "Bạn đã gửi file: " + fileName + "\n");
+	                jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
 	            }
 	        } catch (IOException e) {
 	            JOptionPane.showMessageDialog(rootPane, "Error sending file: " + e.getMessage());
@@ -407,12 +423,35 @@ public class Client extends javax.swing.JFrame {
 	    }
 	}
 
+	private void receiveFile(String fileName, long fileSize) {
+	    File directory = new File("received_files");
+	    if (!directory.exists()) {
+	        directory.mkdirs(); // Tạo thư mục nếu nó không tồn tại
+	    }
+	    try (FileOutputStream fileOutputStream = new FileOutputStream(new File(directory, fileName))) {
+	        InputStream is = socketOfClient.getInputStream();
+	        byte[] buffer = new byte[4096];
+	        long bytesRead = 0;
+	        int read;
+	        while ((read = is.read(buffer)) != -1 && bytesRead < fileSize) {
+	            fileOutputStream.write(buffer, 0, read);
+	            bytesRead += read;
+	        }
+	        fileOutputStream.flush();
+	        System.out.println("File received: " + fileName);
+	        // Hiển thị thông báo về file đã nhận
+	        jTextArea1.setText(jTextArea1.getText() + "Nhận file: " + fileName + "\n");
+	        jTextArea1.setCaretPosition(jTextArea1.getDocument().getLength());
+	    } catch (IOException e) {
+	        JOptionPane.showMessageDialog(rootPane, "Lỗi khi nhận file: " + e.getMessage());
+	    }
+	}
 	private void setIDTitle() {
-		this.setTitle("Client " + this.id);
+		this.setTitle(this.username);
 	}
 
-	private void setID(int id) {
-		this.id = id;
+	private void setUsername(String username) {
+		this.username = username;
 	}
 
 	private void write(String message) throws IOException {

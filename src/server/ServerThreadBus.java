@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
 
 import java.io.IOException;
@@ -12,79 +7,76 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Admin
+ * Manages communication between server threads.
  */
 public class ServerThreadBus {
-	private List<ServerThread> listServerThreads;
+    private List<ServerThread> listServerThreads;
 
-	public List<ServerThread> getListServerThreads() {
-		return listServerThreads;
-	}
+    public List<ServerThread> getListServerThreads() {
+        return listServerThreads;
+    }
 
-	public ServerThreadBus() {
-		listServerThreads = new ArrayList<>();
-	}
+    public ServerThreadBus() {
+        listServerThreads = new ArrayList<>();
+    }
 
-	public void add(ServerThread serverThread) {
-		listServerThreads.add(serverThread);
-	}
+    public synchronized void add(ServerThread serverThread) {
+        listServerThreads.add(serverThread);
+    }
 
-	public void mutilCastSend(String message) { // like sockets.emit in socket.io
-		for (ServerThread serverThread : Server.serverThreadBus.getListServerThreads()) {
-			try {
-				serverThread.write(message);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
+    public synchronized void mutilCastSend(String message) { // like sockets.emit in socket.io
+        for (ServerThread serverThread : listServerThreads) {
+            try {
+                serverThread.write(message);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
-	public void boardCast(int id, String message) {
-		for (ServerThread serverThread : Server.serverThreadBus.getListServerThreads()) {
-			if (serverThread.getClientNumber() == id) {
-				continue;
-			} else {
-				try {
-					serverThread.write(message);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
+    public synchronized void boardCast(String username, String message) {
+        for (ServerThread serverThread : listServerThreads) {
+            if (!serverThread.getUsername().equals(username)) {
+                try {
+                    serverThread.write(message);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
 
-	public int getLength() {
-		return listServerThreads.size();
-	}
+    public synchronized int getLength() {
+        return listServerThreads.size();
+    }
 
-	public void sendOnlineList() {
-		String res = "";
-		List<ServerThread> threadbus = Server.serverThreadBus.getListServerThreads();
-		for (ServerThread serverThread : threadbus) {
-			res += serverThread.getClientNumber() + "-";
-		}
-		Server.serverThreadBus.mutilCastSend("update-online-list" + "," + res);
-	}
+    public synchronized void sendOnlineList() {
+        StringBuilder res = new StringBuilder();
+        for (ServerThread serverThread : listServerThreads) {
+            res.append(serverThread.getUsername()).append("-");
+        }
+        // Remove the trailing dash
+        if (res.length() > 0) {
+            res.setLength(res.length() - 1);
+        }
+        mutilCastSend("update-online-list," + res.toString());
+    }
 
-	public void sendMessageToPersion(int id, String message) {
-		for (ServerThread serverThread : Server.serverThreadBus.getListServerThreads()) {
-			if (serverThread.getClientNumber() == id) {
-				try {
-					serverThread.write("global-message" + "," + message);
-					break;
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
+    public synchronized void sendMessageToPersion(String username, String message) {
+        for (ServerThread serverThread : listServerThreads) {
+            if (serverThread.getUsername().equals(username)) {
+                try {
+//                    serverThread.write("private-message," + message);
+                    serverThread.write("global-message" + "," + message);
+                    break;
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
 
-	public void remove(int id) {
-		for (int i = 0; i < Server.serverThreadBus.getLength(); i++) {
-			if (Server.serverThreadBus.getListServerThreads().get(i).getClientNumber() == id) {
-				Server.serverThreadBus.listServerThreads.remove(i);
-			}
-		}
-	}
+    public synchronized void remove(String username) {
+        listServerThreads.removeIf(serverThread -> serverThread.getUsername().equals(username));
+    }
 }

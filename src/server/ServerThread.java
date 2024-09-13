@@ -93,6 +93,8 @@ public class ServerThread implements Runnable {
             Server.serverThreadBus.mutilCastSend("global-message," + "---Client " + this.username + " đã thoát---");
         }
     }
+    
+//
 
     private void receiveFile(String fileName, long fileSize) {
         File directory = new File("received_files");

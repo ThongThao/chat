@@ -49,6 +49,7 @@ public class ServerThreadBus {
     public synchronized int getLength() {
         return listServerThreads.size();
     }
+    //
 
     public synchronized void sendOnlineList() {
         StringBuilder res = new StringBuilder();

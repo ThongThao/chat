@@ -376,6 +376,7 @@ public class Client extends javax.swing.JFrame {
 			}
 		}
 	}
+	
 	private void sendIcon(String icon) {
         try {
             if (jComboBox1_1.getSelectedIndex() == 0) {

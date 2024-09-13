@@ -38,10 +38,7 @@ public class Client extends javax.swing.JFrame {
 	private List<String> onlineList;
 	private String serverIP;
 	 private String username;
-//hhhhhhhhhhhhhhhh
-	/**
-	 * Creates new form Client
-	 */
+
 	public Client() {
 		initComponents(); // Must be called first
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

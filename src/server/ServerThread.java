@@ -95,6 +95,7 @@ public class ServerThread implements Runnable {
     }
     
 //
+    
 
     private void receiveFile(String fileName, long fileSize) {
         File directory = new File("received_files");

@@ -457,6 +457,7 @@ public class Client extends javax.swing.JFrame {
 		os.newLine();
 		os.flush();
 	}
+	
 
 	 public static void main(String args[]) {
 	        new Client();
